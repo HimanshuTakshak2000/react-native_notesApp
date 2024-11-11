@@ -21,6 +21,10 @@ const LoginScreen = ({navigation}: LoginScreenprops) => {
 
   const handleLoginPress = () => {
     console.log('login is pressed');
+    if(email.length === 0 && password.length === 0){
+      setIsEmailError(true);
+      setIsPasswordError(true);
+    }
   };
 
   const handleCreatePress = () => {

@@ -3,9 +3,7 @@ import { NavigationContainer } from '@react-navigation/native';
 import React from 'react';
 import MainStack from './src/Navigation/MainStack';
 
-
-
-function App(): React.JSX.Element {
+function App() {
 
   return (
     <NavigationContainer>

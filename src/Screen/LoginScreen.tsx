@@ -19,17 +19,69 @@ const LoginScreen = ({navigation}: LoginScreenprops) => {
   const [isEmailError, setIsEmailError] = useState<Boolean>(false);
   const [isPasswordError, setIsPasswordError] = useState<Boolean>(false);
 
+  const emailRegex = /^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/;
+  const isValidateEmail = (email: string) => {
+    return emailRegex.test(email);
+  };
+
+  const passwordRegex =
+    /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[@$!%*?&])[A-Za-z\d@$!%*?&]{8,}$/;
+  const isValidatePassword = (password: string) => {
+    return passwordRegex.test(password);
+  };
+
   const handleLoginPress = () => {
-    console.log('login is pressed');
-    
-    if(email.length === 0 && password.length === 0){
+    // console.log('login is pressed');
+
+    if (email.length === 0 && password.length === 0) {
       setIsEmailError(true);
       setIsPasswordError(true);
+    } else if (!isValidateEmail(email)) {
+      setIsEmailError(true);
+    } else if (!isValidatePassword(password)) {
+      setIsPasswordError(true);
+    } else {
+      setIsEmailError(false);
+      setIsPasswordError(false);
+      loginApi();
+    }
+  };
+
+  const loginApi = async () => {
+    const headers = new Headers();
+    headers.append('Content-Type', 'application/json');
+    const body = {email, password};
+    const res = await fetch('http://192.168.31.199:8000/api/auth/login', { // please correct ip address for the api as both devices must be on same wifi -- http://localhost:8000/api/auth/login
+      headers,
+      method: 'POST',
+      body: JSON.stringify(body),
+    });
+    const data = await res.json();
+    console.log('data :- ', data);
+    navigation.navigate("Home")
+  };
+
+  const handleEmailChange = (text: string) => {
+    setEmail(text);
+    if (!isValidateEmail(text)) {
+      setIsEmailError(true);
+    } else {
+      setIsEmailError(false);
+    }
+  };
+
+  const handlePasswordChange = (text: string) => {
+    setPassword(text);
+    if (!isValidatePassword(text)) {
+      setIsPasswordError(true);
+    } else {
+      setIsPasswordError(false);
     }
   };
 
   const handleCreatePress = () => {
     console.log('Craete Account is pressed');
+    // navigation.navigate("Sign");
   };
 
   return (
@@ -45,12 +97,12 @@ const LoginScreen = ({navigation}: LoginScreenprops) => {
       <Text style={{fontSize: 30, color: 'black', fontWeight: 'bold'}}>
         Welcome Back
       </Text>
-      <View style={{marginTop: 20, marginBottom: 40}}>
+      <View style={{marginTop: 20, marginBottom: 30}}>
         <View style={{marginBottom: 20}}>
           <TextInput
             placeholder="Enter Email"
             value={email}
-            onChangeText={text => setEmail(text)}
+            onChangeText={text => handleEmailChange(text)}
             style={{
               borderColor: 'black',
               borderWidth: 1,
@@ -58,16 +110,21 @@ const LoginScreen = ({navigation}: LoginScreenprops) => {
               fontSize: 16,
             }}
           />
-          {isEmailError && (
-            <Text style={{marginTop: 3, color: 'red'}}>Enter Email</Text>
-          )}
+          {isEmailError &&
+            (email.length == 0 ? (
+              <Text style={{marginTop: 3, color: 'red'}}>Enter Email</Text>
+            ) : (
+              <Text style={{marginTop: 3, color: 'red'}}>
+                Enter valid Email
+              </Text>
+            ))}
         </View>
 
         <View>
           <TextInput
             placeholder="Enter Password"
             value={password}
-            onChangeText={text => setPassword(text)}
+            onChangeText={text => handlePasswordChange(text)}
             style={{
               borderColor: 'black',
               borderWidth: 1,
@@ -75,9 +132,16 @@ const LoginScreen = ({navigation}: LoginScreenprops) => {
               fontSize: 16,
             }}
           />
-          {isPasswordError && (
-            <Text style={{marginTop: 3, color: 'red'}}>Enter Password</Text>
-          )}
+          {isPasswordError &&
+            (password.length == 0 ? (
+              <Text style={{marginTop: 3, color: 'red'}}>Enter Password</Text>
+            ) : (
+              <Text
+                style={{
+                  marginTop: 3,
+                  color: 'red',
+                }}>{`Minimum 8 character\n1 UpperCase\n1 LowerCase\n1 Number\n1 Special Character`}</Text>
+            ))}
         </View>
       </View>
 

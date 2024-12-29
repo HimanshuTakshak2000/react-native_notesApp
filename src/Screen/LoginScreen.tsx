@@ -51,14 +51,15 @@ const LoginScreen = ({navigation}: LoginScreenprops) => {
     const headers = new Headers();
     headers.append('Content-Type', 'application/json');
     const body = {email, password};
-    const res = await fetch('http://192.168.31.199:8000/api/auth/login', { // please correct ip address for the api as both devices must be on same wifi -- http://localhost:8000/api/auth/login
+    const res = await fetch('http://192.168.31.199:8000/api/auth/login', {
+      // please correct ip address for the api as both devices must be on same wifi -- http://localhost:8000/api/auth/login
       headers,
       method: 'POST',
       body: JSON.stringify(body),
     });
     const data = await res.json();
     console.log('data :- ', data);
-    navigation.navigate("Home")
+    navigation.navigate('Home');
   };
 
   const handleEmailChange = (text: string) => {

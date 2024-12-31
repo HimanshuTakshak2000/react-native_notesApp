@@ -21,9 +21,9 @@ const LoginScreen = ({navigation}: LoginScreenprops) => {
   const [isEmailError, setIsEmailError] = useState<Boolean>(false);
   const [isPasswordError, setIsPasswordError] = useState<Boolean>(false);
   const [isLoading, setIsloading] = useState<Boolean>(false);
-  useEffect(()=>{
+  useEffect(() => {
     setIsloading(false);
-  })
+  });
 
   const emailRegex = /^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/;
   const isValidateEmail = (email: string) => {
@@ -49,7 +49,7 @@ const LoginScreen = ({navigation}: LoginScreenprops) => {
     } else {
       setIsEmailError(false);
       setIsPasswordError(false);
-      setIsloading(true)
+      setIsloading(true);
       loginApi();
     }
   };
@@ -66,15 +66,13 @@ const LoginScreen = ({navigation}: LoginScreenprops) => {
     });
     const data = await res.json();
     console.log('data :- ', data);
-    if(data.status == false){
+    if (data.status == false) {
       ToastAndroid.show(data.message, ToastAndroid.SHORT);
-      setIsloading(false)
-    }
-    else{
-      await AsyncStorage.setItem("User",JSON.stringify(data));
+      setIsloading(false);
+    } else {
+      await AsyncStorage.setItem('User', JSON.stringify(data));
       navigation.navigate('Home');
     }
-    
   };
 
   const handleEmailChange = (text: string) => {
@@ -97,7 +95,7 @@ const LoginScreen = ({navigation}: LoginScreenprops) => {
 
   const handleCreatePress = () => {
     console.log('Craete Account is pressed');
-    navigation.navigate("Sign");
+    navigation.navigate('Sign');
   };
 
   return (
@@ -106,11 +104,11 @@ const LoginScreen = ({navigation}: LoginScreenprops) => {
         flex: 1,
         backgroundColor: 'white',
         justifyContent: 'center',
-        position:'relative'
+        position: 'relative',
       }}>
       {/* <Text>LoginScreen</Text> */}
 
-      <View style={{paddingHorizontal: 20,}}>
+      <View style={{paddingHorizontal: 20}}>
         <Text style={{fontSize: 30, color: 'black', fontWeight: 'bold'}}>
           Welcome Back
         </Text>
@@ -174,9 +172,11 @@ const LoginScreen = ({navigation}: LoginScreenprops) => {
               fontWeight: 'bold',
               fontSize: 20,
             }}>
-            {
-              isLoading ? (<ActivityIndicator size={28} color={"white"}/>) : ("Login")
-            }
+            {isLoading ? (
+              <ActivityIndicator size={28} color={'white'} />
+            ) : (
+              'Login'
+            )}
           </Text>
         </TouchableOpacity>
 
@@ -196,11 +196,16 @@ const LoginScreen = ({navigation}: LoginScreenprops) => {
           </Text>
         </TouchableOpacity>
       </View>
-      {
-        isLoading && <View style={{backgroundColor:"transparent", position:'absolute', width:'100%', height:"100%"}} />
-      }
-      
-      
+      {isLoading && (
+        <View
+          style={{
+            backgroundColor: 'transparent',
+            position: 'absolute',
+            width: '100%',
+            height: '100%',
+          }}
+        />
+      )}
     </View>
   );
 };

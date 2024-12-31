@@ -1,11 +1,13 @@
-import {ActivityIndicator,
+import {
+  ActivityIndicator,
   StyleSheet,
   Text,
   TextInput,
   ToastAndroid,
   TouchableOpacity,
-  View,} from 'react-native';
-import React,{useState, useEffect} from 'react';
+  View,
+} from 'react-native';
+import React, {useState, useEffect} from 'react';
 import {StackNavigationProp} from '@react-navigation/stack';
 import {RootNavigationParaList} from '../Navigation/MainStack';
 
@@ -21,9 +23,9 @@ export default function SignUpScreen({navigation}: SignUpScreenProps) {
   const [isNameError, setIsNameError] = useState<Boolean>(false);
   const [isPasswordError, setIsPasswordError] = useState<Boolean>(false);
   const [isLoading, setIsloading] = useState<Boolean>(false);
-  useEffect(()=>{
+  useEffect(() => {
     setIsloading(false);
-  })
+  });
 
   const emailRegex = /^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/;
   const isValidateEmail = (email: string) => {
@@ -50,7 +52,7 @@ export default function SignUpScreen({navigation}: SignUpScreenProps) {
     } else {
       setIsEmailError(false);
       setIsPasswordError(false);
-      setIsloading(true)
+      setIsloading(true);
       signApi();
     }
   };
@@ -67,10 +69,9 @@ export default function SignUpScreen({navigation}: SignUpScreenProps) {
     });
     const data = await res.json();
     console.log('data :- ', data);
-    
-      ToastAndroid.show("Account Created Successfully!!", ToastAndroid.LONG);  
-      navigation.navigate('Login');
-    
+
+    ToastAndroid.show('Account Created Successfully!!', ToastAndroid.LONG);
+    navigation.navigate('Login');
   };
 
   const handleEmailChange = (text: string) => {
@@ -102,127 +103,134 @@ export default function SignUpScreen({navigation}: SignUpScreenProps) {
 
   const handleSignUpPress = () => {
     console.log('Craete Account is pressed');
-    navigation.navigate("Login");
+    navigation.navigate('Login');
   };
 
   return (
     <View
-          style={{
-            flex: 1,
-            backgroundColor: 'white',
-            justifyContent: 'center',
-            position:'relative'
-          }}>
-          {/* <Text>LoginScreen</Text> */}
-    
-          <View style={{paddingHorizontal: 20,}}>
-            <Text style={{fontSize: 30, color: 'black', fontWeight: 'bold'}}>
-              Create New Account
-            </Text>
-            <View style={{marginTop: 20, marginBottom: 30}}>
-              <View style={{marginBottom: 20}}>
-                <TextInput
-                  placeholder="Enter Name"
-                  value={name}
-                  onChangeText={text => handleNameChange(text)}
-                  style={{
-                    borderColor: 'black',
-                    borderWidth: 1,
-                    borderRadius: 8,
-                    fontSize: 16,
-                  }}
-                />
-                {
-                  isNameError && <Text style={{marginTop: 3, color: 'red'}}>Enter Name</Text>
-                }
-              </View>
+      style={{
+        flex: 1,
+        backgroundColor: 'white',
+        justifyContent: 'center',
+        position: 'relative',
+      }}>
+      {/* <Text>LoginScreen</Text> */}
 
-              <View style={{marginBottom: 20}}>
-                <TextInput
-                  placeholder="Enter Email"
-                  value={email}
-                  onChangeText={text => handleEmailChange(text)}
-                  style={{
-                    borderColor: 'black',
-                    borderWidth: 1,
-                    borderRadius: 8,
-                    fontSize: 16,
-                  }}
-                />
-                {isEmailError &&
-                  (email.length == 0 ? (
-                    <Text style={{marginTop: 3, color: 'red'}}>Enter Email</Text>
-                  ) : (
-                    <Text style={{marginTop: 3, color: 'red'}}>
-                      Enter valid Email
-                    </Text>
-                  ))}
-              </View>
-    
-              <View>
-                <TextInput
-                  placeholder="Enter Password"
-                  value={password}
-                  onChangeText={text => handlePasswordChange(text)}
-                  style={{
-                    borderColor: 'black',
-                    borderWidth: 1,
-                    borderRadius: 8,
-                    fontSize: 16,
-                  }}
-                />
-                {isPasswordError &&
-                  (password.length == 0 ? (
-                    <Text style={{marginTop: 3, color: 'red'}}>Enter Password</Text>
-                  ) : (
-                    <Text
-                      style={{
-                        marginTop: 3,
-                        color: 'red',
-                      }}>{`Minimum 8 character\n1 UpperCase\n1 LowerCase\n1 Number\n1 Special Character`}</Text>
-                  ))}
-              </View>
-            </View>
-    
-            <TouchableOpacity
-              style={{backgroundColor: 'black', borderRadius: 8, marginBottom: 60}}
-              onPress={() => handleCreatePress()}
-              activeOpacity={0.6}>
-              <Text
-                style={{
-                  padding: 15,
-                  color: 'white',
-                  textAlign: 'center',
-                  fontWeight: 'bold',
-                  fontSize: 20,
-                }}>
-                {
-                  isLoading ? (<ActivityIndicator size={28} color={"white"}/>) : ("Create Account")
-                }
-              </Text>
-            </TouchableOpacity>
-    
-            <TouchableOpacity
-              style={{borderColor: 'black', borderRadius: 8, borderWidth: 1}}
-              onPress={() => handleSignUpPress()}
-              activeOpacity={0.6}>
-              <Text
-                style={{
-                  padding: 15,
-                  color: 'black',
-                  textAlign: 'center',
-                  fontWeight: 'bold',
-                  fontSize: 20,
-                }}>
-                Login
-              </Text>
-            </TouchableOpacity>
+      <View style={{paddingHorizontal: 20}}>
+        <Text style={{fontSize: 30, color: 'black', fontWeight: 'bold'}}>
+          Create New Account
+        </Text>
+        <View style={{marginTop: 20, marginBottom: 30}}>
+          <View style={{marginBottom: 20}}>
+            <TextInput
+              placeholder="Enter Name"
+              value={name}
+              onChangeText={text => handleNameChange(text)}
+              style={{
+                borderColor: 'black',
+                borderWidth: 1,
+                borderRadius: 8,
+                fontSize: 16,
+              }}
+            />
+            {isNameError && (
+              <Text style={{marginTop: 3, color: 'red'}}>Enter Name</Text>
+            )}
           </View>
-          {
-            isLoading && <View style={{backgroundColor:"transparent", position:'absolute', width:'100%', height:"100%"}} />
-          }
-          
-          
+
+          <View style={{marginBottom: 20}}>
+            <TextInput
+              placeholder="Enter Email"
+              value={email}
+              onChangeText={text => handleEmailChange(text)}
+              style={{
+                borderColor: 'black',
+                borderWidth: 1,
+                borderRadius: 8,
+                fontSize: 16,
+              }}
+            />
+            {isEmailError &&
+              (email.length == 0 ? (
+                <Text style={{marginTop: 3, color: 'red'}}>Enter Email</Text>
+              ) : (
+                <Text style={{marginTop: 3, color: 'red'}}>
+                  Enter valid Email
+                </Text>
+              ))}
+          </View>
+
+          <View>
+            <TextInput
+              placeholder="Enter Password"
+              value={password}
+              onChangeText={text => handlePasswordChange(text)}
+              style={{
+                borderColor: 'black',
+                borderWidth: 1,
+                borderRadius: 8,
+                fontSize: 16,
+              }}
+            />
+            {isPasswordError &&
+              (password.length == 0 ? (
+                <Text style={{marginTop: 3, color: 'red'}}>Enter Password</Text>
+              ) : (
+                <Text
+                  style={{
+                    marginTop: 3,
+                    color: 'red',
+                  }}>{`Minimum 8 character\n1 UpperCase\n1 LowerCase\n1 Number\n1 Special Character`}</Text>
+              ))}
+          </View>
         </View>
+
+        <TouchableOpacity
+          style={{backgroundColor: 'black', borderRadius: 8, marginBottom: 60}}
+          onPress={() => handleCreatePress()}
+          activeOpacity={0.6}>
+          <Text
+            style={{
+              padding: 15,
+              color: 'white',
+              textAlign: 'center',
+              fontWeight: 'bold',
+              fontSize: 20,
+            }}>
+            {isLoading ? (
+              <ActivityIndicator size={28} color={'white'} />
+            ) : (
+              'Create Account'
+            )}
+          </Text>
+        </TouchableOpacity>
+
+        <TouchableOpacity
+          style={{borderColor: 'black', borderRadius: 8, borderWidth: 1}}
+          onPress={() => handleSignUpPress()}
+          activeOpacity={0.6}>
+          <Text
+            style={{
+              padding: 15,
+              color: 'black',
+              textAlign: 'center',
+              fontWeight: 'bold',
+              fontSize: 20,
+            }}>
+            Login
+          </Text>
+        </TouchableOpacity>
+      </View>
+      {isLoading && (
+        <View
+          style={{
+            backgroundColor: 'transparent',
+            position: 'absolute',
+            width: '100%',
+            height: '100%',
+          }}
+        />
+      )}
+    </View>
   );
 }

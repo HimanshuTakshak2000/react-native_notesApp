@@ -5,12 +5,14 @@ import SplashScreen from '../Screen/SplashScreen';
 import SignUpScreen from '../Screen/SignUpScreen';
 import LoginScreen from '../Screen/LoginScreen';
 import HomeScreen from '../Screen/HomeScreen';
+import AddNotes from '../Screen/AddNotes';
 
 export type RootNavigationParaList = {
   Splash: undefined;
   Sign: undefined;
   Login: undefined;
   Home: undefined;
+  AddNotes: undefined;
 };
 
 const Stack = createNativeStackNavigator<RootNavigationParaList>();
@@ -22,6 +24,10 @@ const MainStack: React.FC = () => {
       <Stack.Screen name="Sign" component={SignUpScreen} />
       <Stack.Screen name="Login" component={LoginScreen} />
       <Stack.Screen name="Home" component={HomeScreen} />
+      <Stack.Screen name="AddNotes" component={AddNotes} options={{
+        title:'Add New Notes',
+        headerShown: true
+      }} />
     </Stack.Navigator>
   );
 };

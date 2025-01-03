@@ -72,7 +72,9 @@ export default function HomeScreen({navigation}: HomeScreenProps) {
           <Text style={styles.title}>Notes Not Found</Text>
         </View>
       )}
-      <TouchableOpacity style={styles.btn} onPress={()=> navigation.navigate("AddNotes")}>
+      <TouchableOpacity
+        style={styles.btn}
+        onPress={() => navigation.navigate('AddNotes')}>
         <Text style={styles.btnText}>Create Note</Text>
       </TouchableOpacity>
     </View>
@@ -114,17 +116,17 @@ const styles = StyleSheet.create({
     fontSize: 16,
     fontWeight: '600',
   },
-  notesItem:{
-    width:'90%',
+  notesItem: {
+    width: '90%',
     height: 80,
     borderWidth: 1,
     borderRadius: 10,
     alignSelf: 'center',
     marginTop: 10,
   },
-  noDataView:{
+  noDataView: {
     flex: 1,
-    justifyContent:'center',
-    alignItems:'center',
+    justifyContent: 'center',
+    alignItems: 'center',
   },
 });

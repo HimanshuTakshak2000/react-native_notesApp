@@ -24,10 +24,14 @@ const MainStack: React.FC = () => {
       <Stack.Screen name="Sign" component={SignUpScreen} />
       <Stack.Screen name="Login" component={LoginScreen} />
       <Stack.Screen name="Home" component={HomeScreen} />
-      <Stack.Screen name="AddNotes" component={AddNotes} options={{
-        title:'Add New Notes',
-        headerShown: true
-      }} />
+      <Stack.Screen
+        name="AddNotes"
+        component={AddNotes}
+        options={{
+          title: 'Add New Notes',
+          headerShown: true,
+        }}
+      />
     </Stack.Navigator>
   );
 };

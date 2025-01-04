@@ -41,7 +41,7 @@ export default function HomeScreen({navigation}: HomeScreenProps) {
       headers.append('Content-Type', 'application/json');
 
       const res = await fetch(
-        `http://192.168.31.199:8000/api/notes/getNotes?userId=${userId}`,
+        `http://192.168.31.200:8000/api/notes/getNotes?userId=${userId}`,
         {
           headers,
           method: 'GET',

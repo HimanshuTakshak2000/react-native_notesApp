@@ -6,12 +6,15 @@ import {
   TouchableOpacity,
 } from 'react-native';
 import React, {useState} from 'react';
+import { useSelector } from 'react-redux';
+import { RootState } from '../redux/store';
 
 const AddNotes = () => {
   const [title, setTitle] = useState<string>('');
   const [isTitleError, setIsTitleError] = useState<Boolean>(false);
   const [description, setdescription] = useState<string>('');
   const [isdescriptionError, setIsdescriptionError] = useState<Boolean>(false);
+  const { userId, name } = useSelector((state: RootState) => state.noteReducer);
 
   const handleTitleChange = (text: string) => {
     setTitle(text);
@@ -80,6 +83,12 @@ const AddNotes = () => {
       <TouchableOpacity style={styles.btn} onPress={() => handleAddNotes()}>
         <Text style={styles.btnText}>Add Note</Text>
       </TouchableOpacity>
+
+      <View>
+        <Text>
+          name :- {name}  id:-{userId}
+        </Text>
+      </View>
     </View>
   );
 };

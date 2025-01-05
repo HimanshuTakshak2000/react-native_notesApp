@@ -10,6 +10,8 @@ import React, {useEffect, useState} from 'react';
 import {StackNavigationProp} from '@react-navigation/stack';
 import {RootNavigationParaList} from '../Navigation/MainStack';
 import AsyncStorage from '@react-native-async-storage/async-storage';
+import { useDispatch } from 'react-redux';
+import { setUser } from '../redux/noteReducer'
 
 type HomeScreenProps = {
   navigation: StackNavigationProp<RootNavigationParaList, 'Home'>;
@@ -29,6 +31,7 @@ type noteType = {
 export default function HomeScreen({navigation}: HomeScreenProps) {
   const [details, setDetais] = useState<string>('');
   const [notes, setNotes] = useState<noteType[]>([]);
+  const dispatch = useDispatch();
   useEffect(() => {
     getAllNotes();
   }, []);
@@ -37,6 +40,8 @@ export default function HomeScreen({navigation}: HomeScreenProps) {
     if (user) {
       const parsedUser = JSON.parse(user);
       const userId = parsedUser._id;
+      const name = parsedUser.name;
+      dispatch(setUser({userId, name}))
       const headers = new Headers();
       headers.append('Content-Type', 'application/json');
 

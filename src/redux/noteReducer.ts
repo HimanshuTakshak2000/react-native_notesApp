@@ -1,24 +1,26 @@
 import { createSlice, PayloadAction } from "@reduxjs/toolkit";
-import { RootState } from "./store";
 
-export interface AddNotesType{
-    title: string,
-    desc: string,
-}
-
-const initialState: string = ''
-
-
-const addNotesSlice = createSlice({
-    name:'AddNotes',
+interface UserState {
+    userId: string;
+    name: string;
+  }
+  
+  const initialState: UserState = {
+    userId: '',
+    name: '',
+  };
+  
+  const notesSlice = createSlice({
+    name: 'notes',
     initialState,
-    reducers:{
-        addNotes(state, action: PayloadAction<string>){
-            
-        }
-    }
-});
-
-export const {addNotes} = addNotesSlice.actions;
-export default addNotesSlice.reducer;
-export const addNotesSelect = (state: RootState) => state.addNoteReducer;
+    reducers: {
+      setUser: (state, action: PayloadAction<{ userId: string; name: string }>) => {
+        state.userId = action.payload.userId;
+        state.name = action.payload.name;
+      },
+    },
+  });
+  
+  export const { setUser } = notesSlice.actions;
+  export default notesSlice.reducer;
+  

@@ -6,12 +6,14 @@ import {
   TouchableOpacity,
   FlatList,
 } from 'react-native';
-import React, {useEffect, useState} from 'react';
+import React, {useCallback, useEffect, useState} from 'react';
 import {StackNavigationProp} from '@react-navigation/stack';
 import {RootNavigationParaList} from '../Navigation/MainStack';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import { useDispatch } from 'react-redux';
-import { setUser } from '../redux/noteReducer'
+import { setUser } from '../redux/noteReducer';
+import { baseUrl } from '../utils/baseUrl';
+import { useFocusEffect, useIsFocused } from '@react-navigation/native';
 
 type HomeScreenProps = {
   navigation: StackNavigationProp<RootNavigationParaList, 'Home'>;
@@ -29,12 +31,18 @@ type noteType = {
 };
 
 export default function HomeScreen({navigation}: HomeScreenProps) {
-  const [details, setDetais] = useState<string>('');
   const [notes, setNotes] = useState<noteType[]>([]);
   const dispatch = useDispatch();
-  useEffect(() => {
+  useFocusEffect(useCallback(() => {
     getAllNotes();
-  }, []);
+  },[]));
+
+  // We can use both above or below code to get focused on the current page :- 
+  // const isFocused = useIsFocused();
+  // useEffect(() => {
+  //   getAllNotes();
+  // },[isFocused]);
+
   const getAllNotes = async () => {
     const user = await AsyncStorage.getItem('User');
     if (user) {
@@ -46,7 +54,7 @@ export default function HomeScreen({navigation}: HomeScreenProps) {
       headers.append('Content-Type', 'application/json');
 
       const res = await fetch(
-        `http://192.168.31.200:8000/api/notes/getNotes?userId=${userId}`,
+        `${baseUrl}api/notes/getNotes?userId=${userId}`,
         {
           headers,
           method: 'GET',

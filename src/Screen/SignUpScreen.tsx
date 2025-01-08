@@ -10,6 +10,7 @@ import {
 import React, {useState, useEffect} from 'react';
 import {StackNavigationProp} from '@react-navigation/stack';
 import {RootNavigationParaList} from '../Navigation/MainStack';
+import { baseUrl } from '../utils/baseUrl';
 
 type SignUpScreenProps = {
   navigation: StackNavigationProp<RootNavigationParaList, 'Sign'>;
@@ -61,7 +62,7 @@ export default function SignUpScreen({navigation}: SignUpScreenProps) {
     const headers = new Headers();
     headers.append('Content-Type', 'application/json');
     const body = {email, password, name};
-    const res = await fetch('http://192.168.31.200:8000/api/auth/register', {
+    const res = await fetch(`${baseUrl}api/auth/register`, {
       // please enter correct ip address(i.e 192.168.31.200) for the api as both devices must be on same wifi -- http://localhost:8000/api/auth/register
       headers,
       method: 'POST',

@@ -11,6 +11,7 @@ import React, {useEffect, useState} from 'react';
 import {StackNavigationProp} from '@react-navigation/stack';
 import {RootNavigationParaList} from '../Navigation/MainStack';
 import AsyncStorage from '@react-native-async-storage/async-storage';
+import { baseUrl } from '../utils/baseUrl';
 interface LoginScreenprops {
   navigation: StackNavigationProp<RootNavigationParaList, 'Login'>;
 }
@@ -58,8 +59,7 @@ const LoginScreen = ({navigation}: LoginScreenprops) => {
     const headers = new Headers();
     headers.append('Content-Type', 'application/json');
     const body = {email, password};
-    const res = await fetch('http://192.168.31.200:8000/api/auth/login', {
-      // please correct ip address for the api as both devices must be on same wifi -- http://localhost:8000/api/auth/login
+    const res = await fetch(`${baseUrl}api/auth/login`, {
       headers,
       method: 'POST',
       body: JSON.stringify(body),

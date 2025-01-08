@@ -4,30 +4,39 @@ import {
   View,
   TextInput,
   TouchableOpacity,
+  ToastAndroid
 } from 'react-native';
 import React, {useState} from 'react';
 import { useSelector } from 'react-redux';
 import { RootState } from '../redux/store';
+import { baseUrl } from '../utils/baseUrl';
+import { StackNavigationProp } from '@react-navigation/stack';
+import { RootNavigationParaList } from '../Navigation/MainStack';
+import Loader from '../component/Loader';
 
-const AddNotes = () => {
+type AddNotesScreenProps = {
+  navigation: StackNavigationProp<RootNavigationParaList, 'AddNotes'>;
+};
+
+const AddNotes = ({navigation}: AddNotesScreenProps) => {
   const [title, setTitle] = useState<string>('');
   const [isTitleError, setIsTitleError] = useState<Boolean>(false);
-  const [description, setdescription] = useState<string>('');
+  const [description, setDescription] = useState<string>('');
   const [isdescriptionError, setIsdescriptionError] = useState<Boolean>(false);
   const { userId, name } = useSelector((state: RootState) => state.noteReducer);
+  const [isLoading, setIsLoading] = useState<Boolean>(false);
 
   const handleTitleChange = (text: string) => {
     setTitle(text);
     if (text.length == 0) {
       setIsTitleError(true);
     } else {
-      setIsTitleError(true);
-      (false);
+      setIsTitleError(false);
     }
   };
 
   const handledescriptionChange = (text: string) => {
-    setdescription(text);
+    setDescription(text);
     if (text.length == 0) {
       setIsdescriptionError(true);
     } else {
@@ -48,8 +57,28 @@ const AddNotes = () => {
     } else {
       setIsTitleError(false);
       setIsdescriptionError(false);
+      setIsLoading(true);
+      addNotesApi();
     }
   };
+
+  const addNotesApi = async () => {
+      const headers = new Headers();
+      headers.append('Content-Type', 'application/json');
+      const body = {title, description, userId, userName: name};
+      const res = await fetch(`${baseUrl}api/notes/addNotes`, {
+        headers,
+        method: 'POST',
+        body: JSON.stringify(body),
+      });
+      
+      await res.json();
+  
+      ToastAndroid.show('Notes Added Successfully!!', ToastAndroid.LONG);
+      setTitle('');
+      setDescription('');
+      setIsLoading(false);
+    };
 
   return (
     <View style={styles.container}>
@@ -84,11 +113,7 @@ const AddNotes = () => {
         <Text style={styles.btnText}>Add Note</Text>
       </TouchableOpacity>
 
-      <View>
-        <Text>
-          name :- {name}  id:-{userId}
-        </Text>
-      </View>
+      <Loader visible={isLoading} />
     </View>
   );
 };

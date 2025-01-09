@@ -24,7 +24,7 @@ const AddNotes = ({navigation}: AddNotesScreenProps) => {
   const [description, setDescription] = useState<string>('');
   const [isdescriptionError, setIsdescriptionError] = useState<Boolean>(false);
   const { userId, name } = useSelector((state: RootState) => state.noteReducer);
-  const [isLoading, setIsLoading] = useState<Boolean>(false);
+  const [isLoading, setIsLoading] = useState<boolean>(false);
 
   const handleTitleChange = (text: string) => {
     setTitle(text);

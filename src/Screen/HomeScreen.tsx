@@ -51,6 +51,7 @@ export default function HomeScreen({navigation}: HomeScreenProps) {
       getAllNotes();
     }, []),
   );
+  console.log("noteId--------- ",noteId);
 
   // We can use both above or below code to get focused on the current page :-
   // const isFocused = useIsFocused();
@@ -73,7 +74,6 @@ export default function HomeScreen({navigation}: HomeScreenProps) {
         method: 'GET',
       });
       const data = await res.json();
-      console.log('data :- ', data.length);
       setNotes(data);
     }
   };
@@ -82,9 +82,6 @@ export default function HomeScreen({navigation}: HomeScreenProps) {
       setIsUpdatePressed(true);
       setNoteId(item._id);
     }
-    // else{
-    //   setIsUpdatePressed(true);
-    // }
     setTitle(item.title);
     setisModelVisible(true);
     setDescription(item.description);
@@ -156,12 +153,12 @@ export default function HomeScreen({navigation}: HomeScreenProps) {
     getAllNotes();
   };
   const renderItem = (item: noteType) => {
-    console.log('item :- ', item);
+  
     return (
       <View style={styles.notesItem}>
-        <TouchableOpacity onPress={() => eachItemPress(item, 1)}>
-          <Text>{item.title}</Text>
-          <Text>
+        <TouchableOpacity onPress={() => eachItemPress(item, 1)} style={{justifyContent:'center'}}>
+          <Text style={{color:'black', fontSize:16, fontWeight:'800', marginBottom:8}}>{item.title}</Text>
+          <Text style={{color:'black', fontSize:14, fontWeight:'400'}}>
             {item.description.length < 30
               ? item.description
               : `${item.description.substring(0, 30)}...`}
@@ -169,8 +166,8 @@ export default function HomeScreen({navigation}: HomeScreenProps) {
         </TouchableOpacity>
 
         <View style={{justifyContent:'space-between'}}>
-          <Text onPress={() => eachItemPress(item, 2)}>Update</Text>
-          <Text onPress={() => deleteNotes(item._id)}>Delete</Text>
+          <Text onPress={() => eachItemPress(item, 2)} style={{color:'blue', fontSize:16, fontWeight:'600'}}>Update</Text>
+          <Text onPress={() => deleteNotes(item._id)} style={{color:'red', fontSize:16, fontWeight:'600'}}>Delete</Text>
         </View>
       </View>
     );
@@ -207,7 +204,7 @@ export default function HomeScreen({navigation}: HomeScreenProps) {
             style={{
               backgroundColor: 'white',
               width: '100%',
-              height: 230,
+              height: 300,
               justifyContent: 'center',
             }}>
             <TextInput
@@ -225,7 +222,7 @@ export default function HomeScreen({navigation}: HomeScreenProps) {
               </View>
             )}
             <TextInput
-              style={styles.input}
+              style={[styles.input,{height:100, textAlignVertical:'top'}]}
               placeholder="Enter Notes Description"
               multiline
               onChangeText={t => handledescriptionChange(t)}

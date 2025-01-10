@@ -96,7 +96,7 @@ const AddNotes = ({navigation}: AddNotesScreenProps) => {
         </View>
       )}
       <TextInput
-        style={styles.input}
+        style={[styles.input,{height:100,textAlignVertical: 'top'}]}
         placeholder="Enter Notes Description"
         multiline
         onChangeText={(t)=> handledescriptionChange(t)}

@@ -11,7 +11,7 @@ import { useSelector } from 'react-redux';
 import { RootState } from '../redux/store';
 import { baseUrl } from '../utils/baseUrl';
 import { StackNavigationProp } from '@react-navigation/stack';
-import { RootNavigationParaList } from '../Navigation/MainStack';
+import { RootNavigationParaList } from '../Navigation/AppStack';
 import Loader from '../component/Loader';
 
 type AddNotesScreenProps = {

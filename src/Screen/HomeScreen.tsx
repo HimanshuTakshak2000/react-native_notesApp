@@ -10,7 +10,7 @@ import {
 } from 'react-native';
 import React, {useCallback, useEffect, useState} from 'react';
 import {StackNavigationProp} from '@react-navigation/stack';
-import {RootNavigationParaList} from '../Navigation/MainStack';
+import {RootNavigationParaList} from '../Navigation/AppStack';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import {useDispatch} from 'react-redux';
 import {setUser} from '../redux/noteReducer';
@@ -39,10 +39,10 @@ export default function HomeScreen({navigation}: HomeScreenProps) {
   const [notes, setNotes] = useState<noteType[]>([]);
   const [isModelVisible, setisModelVisible] = useState<boolean>(false);
   const [title, setTitle] = useState<string>('');
-  const [isTitleError, setIsTitleError] = useState<Boolean>(false);
+  const [isTitleError, setIsTitleError] = useState<boolean>(false);
   const [description, setDescription] = useState<string>('');
   const [noteId, setNoteId] = useState<string>('');
-  const [isdescriptionError, setIsdescriptionError] = useState<Boolean>(false);
+  const [isdescriptionError, setIsdescriptionError] = useState<boolean>(false);
   const [isUpdatePressed, setIsUpdatePressed] = useState<boolean>(false);
   const {userId, name} = useSelector((state: RootState) => state.noteReducer);
   const dispatch = useDispatch();
@@ -51,7 +51,6 @@ export default function HomeScreen({navigation}: HomeScreenProps) {
       getAllNotes();
     }, []),
   );
-  console.log("noteId--------- ",noteId);
 
   // We can use both above or below code to get focused on the current page :-
   // const isFocused = useIsFocused();

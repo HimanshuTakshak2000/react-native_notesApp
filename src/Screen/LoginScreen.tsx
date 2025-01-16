@@ -9,16 +9,16 @@ import {
 } from 'react-native';
 import React, {useEffect, useState} from 'react';
 import {StackNavigationProp} from '@react-navigation/stack';
-import {RootNavigationParaList} from '../Navigation/MainStack';
+import {RootParaList} from '../Navigation/RootParaList';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import { baseUrl } from '../utils/baseUrl';
-interface LoginScreenprops {
-  navigation: StackNavigationProp<RootNavigationParaList, 'Login'>;
-}
+import { useNavigation } from '@react-navigation/native';
 
-const LoginScreen = ({navigation}: LoginScreenprops) => {
-  const [email, setEmail] = useState<string>('himanshutakshak2000@gmail.com');
-  const [password, setPassword] = useState<string>('Test@123');
+
+const LoginScreen = () => {
+  const navigation = useNavigation<StackNavigationProp<RootParaList>>()
+  const [email, setEmail] = useState<string>('');
+  const [password, setPassword] = useState<string>('');
   const [isEmailError, setIsEmailError] = useState<Boolean>(false);
   const [isPasswordError, setIsPasswordError] = useState<Boolean>(false);
   const [isLoading, setIsloading] = useState<Boolean>(false);
@@ -71,7 +71,7 @@ const LoginScreen = ({navigation}: LoginScreenprops) => {
       setIsloading(false);
     } else {
       await AsyncStorage.setItem('User', JSON.stringify(data));
-      navigation.navigate('Home');
+      navigation.replace('App',{screen:'Home'});
     }
   };
 
@@ -95,7 +95,7 @@ const LoginScreen = ({navigation}: LoginScreenprops) => {
 
   const handleCreatePress = () => {
     console.log('Craete Account is pressed');
-    navigation.navigate('Sign');
+    navigation.navigate('Auth', { screen: 'Sign' });
   };
 
   return (

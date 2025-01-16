@@ -10,7 +10,7 @@ import {
 } from 'react-native';
 import React, {useCallback, useEffect, useState} from 'react';
 import {StackNavigationProp} from '@react-navigation/stack';
-import {RootNavigationParaList} from '../Navigation/AppStack';
+import {App} from '../Navigation/RootParaList';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import {useDispatch} from 'react-redux';
 import {setUser} from '../redux/noteReducer';
@@ -21,7 +21,7 @@ import {useSelector} from 'react-redux';
 import {RootState} from '../redux/store';
 
 type HomeScreenProps = {
-  navigation: StackNavigationProp<RootNavigationParaList, 'Home'>;
+  navigation: StackNavigationProp<App, 'Home'>;
 };
 
 type noteType = {

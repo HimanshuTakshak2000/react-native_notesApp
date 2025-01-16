@@ -9,21 +9,23 @@ import {
 } from 'react-native';
 import React, {useState, useEffect} from 'react';
 import {StackNavigationProp} from '@react-navigation/stack';
-import {RootNavigationParaList} from '../Navigation/MainStack';
-import { baseUrl } from '../utils/baseUrl';
+import {Auth} from '../Navigation/RootParaList';
+import {baseUrl} from '../utils/baseUrl';
 
 type SignUpScreenProps = {
-  navigation: StackNavigationProp<RootNavigationParaList, 'Sign'>;
+  navigation: StackNavigationProp<Auth, 'Sign'>;
 };
 
 export default function SignUpScreen({navigation}: SignUpScreenProps) {
   const [email, setEmail] = useState<string>('');
   const [name, setName] = useState<string>('');
   const [password, setPassword] = useState<string>('');
-  const [isEmailError, setIsEmailError] = useState<Boolean>(false);
-  const [isNameError, setIsNameError] = useState<Boolean>(false);
-  const [isPasswordError, setIsPasswordError] = useState<Boolean>(false);
-  const [isLoading, setIsloading] = useState<Boolean>(false);
+  const [isEmailError, setIsEmailError] = useState<boolean>(false);
+  const [isNameError, setIsNameError] = useState<boolean>(false);
+  const [isPasswordError, setIsPasswordError] = useState<boolean>(false);
+  const [isLoading, setIsloading] = useState<boolean>(false);
+  const [isEmailIdExistError, setIsEmailIdExistError] =
+    useState<boolean>(false);
   useEffect(() => {
     setIsloading(false);
   });
@@ -70,12 +72,18 @@ export default function SignUpScreen({navigation}: SignUpScreenProps) {
     });
     const data = await res.json();
     console.log('data :- ', data);
-
-    ToastAndroid.show('Account Created Successfully!!', ToastAndroid.LONG);
-    navigation.navigate('Login');
+    if(data.status == false){
+      setIsEmailIdExistError(true);
+      ToastAndroid.show(`${data.message}`, ToastAndroid.LONG);
+    }
+    else{ 
+      ToastAndroid.show('Account Created Successfully!!', ToastAndroid.LONG);
+      navigation.navigate('Login');
+    }
   };
 
   const handleEmailChange = (text: string) => {
+    setIsEmailIdExistError(false);
     setEmail(text);
     if (!isValidateEmail(text)) {
       setIsEmailError(true);
@@ -159,6 +167,11 @@ export default function SignUpScreen({navigation}: SignUpScreenProps) {
                   Enter valid Email
                 </Text>
               ))}
+            {isEmailIdExistError && (
+              <Text style={{marginTop: 3, color: 'red'}}>
+                Email Already Exist
+              </Text>
+            )}
           </View>
 
           <View>

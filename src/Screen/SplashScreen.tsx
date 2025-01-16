@@ -1,22 +1,25 @@
 import {StyleSheet, Text, View} from 'react-native';
 import React, {useEffect} from 'react';
-import {StackNavigationProp} from '@react-navigation/stack';
-import {RootNavigationParaList} from '../Navigation/AppStack';
 import { useSelector } from 'react-redux';
-import { State } from 'react-native-gesture-handler';
 import { RootState } from '../redux/store';
+import { useNavigation } from '@react-navigation/native';
+import { RootParaList } from '../Navigation/RootParaList';
+import { StackNavigationProp } from '@react-navigation/stack';
 
-interface SplashScreenProps {
-  navigation: StackNavigationProp<RootNavigationParaList, 'Splash'>;
-}
 
-const SplashScreen = ({navigation}: SplashScreenProps) => {
-  const {isUserLogined} = useSelector((state: RootState)=> state.userLoginReducer)
+const SplashScreen = () => {
+  const {isUserLogined} = useSelector((state: RootState)=> state.userLoginReducer);
+  const navigation = useNavigation<StackNavigationProp< RootParaList>>();
+  
   useEffect(() => {
-    setTimeout(() => {
-      isUserLogined ? navigation.navigate('Home'): navigation.navigate('Login');
+    const timeout = setTimeout(() => {
+      isUserLogined ? navigation.replace('App',{screen:'Home'}) : navigation.replace('Auth',{screen:'Login'});
     }, 3000);
-  }, []);
+
+    return () => clearTimeout(timeout); // clear the time out on unmounting
+
+  }, [isUserLogined]); // navigation
+
   return (
     <View style={styles.container}>
       <Text style={styles.appTitle}>Notes App</Text>

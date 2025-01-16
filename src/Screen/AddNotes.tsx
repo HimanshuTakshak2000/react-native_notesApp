@@ -11,11 +11,11 @@ import { useSelector } from 'react-redux';
 import { RootState } from '../redux/store';
 import { baseUrl } from '../utils/baseUrl';
 import { StackNavigationProp } from '@react-navigation/stack';
-import { RootNavigationParaList } from '../Navigation/AppStack';
+import { App } from '../Navigation/RootParaList';
 import Loader from '../component/Loader';
 
 type AddNotesScreenProps = {
-  navigation: StackNavigationProp<RootNavigationParaList, 'AddNotes'>;
+  navigation: StackNavigationProp<App, 'AddNotes'>;
 };
 
 const AddNotes = ({navigation}: AddNotesScreenProps) => {

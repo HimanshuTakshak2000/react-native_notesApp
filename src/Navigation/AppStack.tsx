@@ -1,8 +1,8 @@
-import React from 'react'
+import React from 'react';
 import {createNativeStackNavigator} from '@react-navigation/native-stack';
 import HomeScreen from '../Screen/HomeScreen';
 import AddNotes from '../Screen/AddNotes';
-import { App } from './RootParaList';
+import {App} from './RootParaList';
 
 const Stack = createNativeStackNavigator<App>();
 export default function AppStack() {
@@ -18,5 +18,5 @@ export default function AppStack() {
         }}
       />
     </Stack.Navigator>
-  )
+  );
 }

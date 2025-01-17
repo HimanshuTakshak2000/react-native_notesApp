@@ -11,12 +11,11 @@ import React, {useEffect, useState} from 'react';
 import {StackNavigationProp} from '@react-navigation/stack';
 import {RootParaList} from '../Navigation/RootParaList';
 import AsyncStorage from '@react-native-async-storage/async-storage';
-import { baseUrl } from '../utils/baseUrl';
-import { useNavigation } from '@react-navigation/native';
-
+import {baseUrl} from '../utils/baseUrl';
+import {useNavigation} from '@react-navigation/native';
 
 const LoginScreen = () => {
-  const navigation = useNavigation<StackNavigationProp<RootParaList>>()
+  const navigation = useNavigation<StackNavigationProp<RootParaList>>();
   const [email, setEmail] = useState<string>('');
   const [password, setPassword] = useState<string>('');
   const [isEmailError, setIsEmailError] = useState<Boolean>(false);
@@ -71,7 +70,7 @@ const LoginScreen = () => {
       setIsloading(false);
     } else {
       await AsyncStorage.setItem('User', JSON.stringify(data));
-      navigation.replace('App',{screen:'Home'});
+      navigation.replace('App', {screen: 'Home'});
     }
   };
 
@@ -95,7 +94,7 @@ const LoginScreen = () => {
 
   const handleCreatePress = () => {
     console.log('Craete Account is pressed');
-    navigation.navigate('Auth', { screen: 'Sign' });
+    navigation.navigate('Auth', {screen: 'Sign'});
   };
 
   return (

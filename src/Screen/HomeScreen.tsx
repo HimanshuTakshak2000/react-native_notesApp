@@ -152,21 +152,38 @@ export default function HomeScreen({navigation}: HomeScreenProps) {
     getAllNotes();
   };
   const renderItem = (item: noteType) => {
-  
     return (
       <View style={styles.notesItem}>
-        <TouchableOpacity onPress={() => eachItemPress(item, 1)} style={{justifyContent:'center'}}>
-          <Text style={{color:'black', fontSize:16, fontWeight:'800', marginBottom:8}}>{item.title}</Text>
-          <Text style={{color:'black', fontSize:14, fontWeight:'400'}}>
+        <TouchableOpacity
+          onPress={() => eachItemPress(item, 1)}
+          style={{justifyContent: 'center'}}>
+          <Text
+            style={{
+              color: 'black',
+              fontSize: 16,
+              fontWeight: '800',
+              marginBottom: 8,
+            }}>
+            {item.title}
+          </Text>
+          <Text style={{color: 'black', fontSize: 14, fontWeight: '400'}}>
             {item.description.length < 30
               ? item.description
               : `${item.description.substring(0, 30)}...`}
           </Text>
         </TouchableOpacity>
 
-        <View style={{justifyContent:'space-between'}}>
-          <Text onPress={() => eachItemPress(item, 2)} style={{color:'blue', fontSize:16, fontWeight:'600'}}>Update</Text>
-          <Text onPress={() => deleteNotes(item._id)} style={{color:'red', fontSize:16, fontWeight:'600'}}>Delete</Text>
+        <View style={{justifyContent: 'space-between'}}>
+          <Text
+            onPress={() => eachItemPress(item, 2)}
+            style={{color: 'blue', fontSize: 16, fontWeight: '600'}}>
+            Update
+          </Text>
+          <Text
+            onPress={() => deleteNotes(item._id)}
+            style={{color: 'red', fontSize: 16, fontWeight: '600'}}>
+            Delete
+          </Text>
         </View>
       </View>
     );
@@ -192,7 +209,9 @@ export default function HomeScreen({navigation}: HomeScreenProps) {
         </TouchableOpacity>
       </View>
 
-      <Modal visible={isModelVisible} onRequestClose={() => setisModelVisible(false)} >
+      <Modal
+        visible={isModelVisible}
+        onRequestClose={() => setisModelVisible(false)}>
         <View
           style={{
             flex: 1,
@@ -211,7 +230,7 @@ export default function HomeScreen({navigation}: HomeScreenProps) {
               placeholder="Enter Notes Title"
               onChangeText={t => handleTitleChange(t)}
               value={title}
-              editable = {isUpdatePressed}
+              editable={isUpdatePressed}
             />
             {isTitleError && (
               <View style={{marginVertical: 5, marginLeft: 22}}>
@@ -221,12 +240,12 @@ export default function HomeScreen({navigation}: HomeScreenProps) {
               </View>
             )}
             <TextInput
-              style={[styles.input,{height:100, textAlignVertical:'top'}]}
+              style={[styles.input, {height: 100, textAlignVertical: 'top'}]}
               placeholder="Enter Notes Description"
               multiline
               onChangeText={t => handledescriptionChange(t)}
               value={description}
-              editable = {isUpdatePressed}
+              editable={isUpdatePressed}
             />
             {isdescriptionError && (
               <View style={{marginVertical: 5, marginLeft: 22}}>
@@ -242,11 +261,11 @@ export default function HomeScreen({navigation}: HomeScreenProps) {
                 <Text style={styles.btnModelText}>Update Note</Text>
               </TouchableOpacity>
             ) : (
-                <TouchableOpacity
-                  style={styles.btnModel}
-                  onPress={() => setisModelVisible(false)}>
-                  <Text style={styles.btnModelText}>Close</Text>
-                </TouchableOpacity>
+              <TouchableOpacity
+                style={styles.btnModel}
+                onPress={() => setisModelVisible(false)}>
+                <Text style={styles.btnModelText}>Close</Text>
+              </TouchableOpacity>
             )}
           </View>
         </View>

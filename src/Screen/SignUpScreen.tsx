@@ -72,11 +72,10 @@ export default function SignUpScreen({navigation}: SignUpScreenProps) {
     });
     const data = await res.json();
     console.log('data :- ', data);
-    if(data.status == false){
+    if (data.status == false) {
       setIsEmailIdExistError(true);
       ToastAndroid.show(`${data.message}`, ToastAndroid.LONG);
-    }
-    else{ 
+    } else {
       ToastAndroid.show('Account Created Successfully!!', ToastAndroid.LONG);
       navigation.navigate('Login');
     }

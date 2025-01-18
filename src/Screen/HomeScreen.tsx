@@ -10,19 +10,16 @@ import {
 } from 'react-native';
 import React, {useCallback, useEffect, useState} from 'react';
 import {StackNavigationProp} from '@react-navigation/stack';
-import {App} from '../Navigation/RootParaList';
+import {App, RootParaList} from '../Navigation/RootParaList';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import {useDispatch} from 'react-redux';
 import {setUser} from '../redux/noteReducer';
 import {baseUrl} from '../utils/baseUrl';
-import {useFocusEffect, useIsFocused} from '@react-navigation/native';
+import {useFocusEffect, useIsFocused, useNavigation} from '@react-navigation/native';
 import {TextInput} from 'react-native-gesture-handler';
 import {useSelector} from 'react-redux';
 import {RootState} from '../redux/store';
-
-type HomeScreenProps = {
-  navigation: StackNavigationProp<App, 'Home'>;
-};
+import Icon from 'react-native-vector-icons/FontAwesome';
 
 type noteType = {
   _id: string;
@@ -35,7 +32,7 @@ type noteType = {
   __v: number;
 };
 
-export default function HomeScreen({navigation}: HomeScreenProps) {
+export default function HomeScreen() {
   const [notes, setNotes] = useState<noteType[]>([]);
   const [isModelVisible, setisModelVisible] = useState<boolean>(false);
   const [title, setTitle] = useState<string>('');
@@ -44,8 +41,10 @@ export default function HomeScreen({navigation}: HomeScreenProps) {
   const [noteId, setNoteId] = useState<string>('');
   const [isdescriptionError, setIsdescriptionError] = useState<boolean>(false);
   const [isUpdatePressed, setIsUpdatePressed] = useState<boolean>(false);
+  const [isUserDropDown, setIsUerDropDown] = useState<boolean>(false);
   const {userId, name} = useSelector((state: RootState) => state.noteReducer);
   const dispatch = useDispatch();
+  const navigation = useNavigation<StackNavigationProp<RootParaList>>();
   useFocusEffect(
     useCallback(() => {
       getAllNotes();
@@ -151,6 +150,13 @@ export default function HomeScreen({navigation}: HomeScreenProps) {
     setIsUpdatePressed(false);
     getAllNotes();
   };
+
+  const handleLogoutPress = async()=>{
+    await AsyncStorage.clear();
+    setIsUerDropDown(false);
+    navigation.replace('Auth', {screen: 'Login'});
+  }
+
   const renderItem = (item: noteType) => {
     return (
       <View style={styles.notesItem}>
@@ -204,7 +210,7 @@ export default function HomeScreen({navigation}: HomeScreenProps) {
         )}
         <TouchableOpacity
           style={styles.btn}
-          onPress={() => navigation.navigate('AddNotes')}>
+          onPress={() => navigation.navigate("App",{screen:'AddNotes'})}>
           <Text style={styles.btnText}>Create Note</Text>
         </TouchableOpacity>
       </View>
@@ -270,6 +276,25 @@ export default function HomeScreen({navigation}: HomeScreenProps) {
           </View>
         </View>
       </Modal>
+      <View style={{position:'absolute', right:15, top:20}}>
+        {
+          !isUserDropDown? 
+          <TouchableOpacity onPress={()=> setIsUerDropDown(true)}>
+            <Icon name="user-circle" size={30} color="black" />
+          </TouchableOpacity>
+          :(
+            <TouchableOpacity style={{backgroundColor:'white', margin:10, alignItems:'center', borderWidth:1, borderColor:'gray', paddingVertical:20, paddingHorizontal:20, justifyContent:'center',borderRadius:10}} activeOpacity={0.7} onPress={()=> setIsUerDropDown(false)}>
+              <Text style={{ fontSize:16, fontWeight:'700', marginBottom:20}}>
+                {`Hi, ${name.split(' ').map((word)=> word.charAt(0).toUpperCase()+word.substring(1)).join(" ")}`}
+              </Text>
+              <TouchableOpacity style={{padding:12, backgroundColor:'powderblue', borderRadius:10}} onPress={handleLogoutPress}>
+                <Text>Logout</Text>
+              </TouchableOpacity>
+              </TouchableOpacity>
+          )
+        }
+            
+      </View>
     </>
   );
 }

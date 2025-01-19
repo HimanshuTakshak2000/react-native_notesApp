@@ -51,7 +51,7 @@ export default function SignUpScreen({navigation}: SignUpScreenProps) {
   const signApi = async () => {
     const headers = new Headers();
     headers.append('Content-Type', 'application/json');
-    const body = {email, password, name};
+    const body = {email: email.toLocaleLowerCase(), password, name};
     const res = await fetch(`${baseUrl}api/auth/register`, {
       // please enter correct ip address(i.e 192.168.31.200) for the api as both devices must be on same wifi -- http://localhost:8000/api/auth/register
       headers,
@@ -61,6 +61,7 @@ export default function SignUpScreen({navigation}: SignUpScreenProps) {
     const data = await res.json();
     if (data.status == false) {
       setIsEmailIdExistError(true);
+      setEmail(email.toLocaleLowerCase());
       ToastAndroid.show(`${data.message}`, ToastAndroid.LONG);
     } else {
       ToastAndroid.show('Account Created Successfully!!', ToastAndroid.LONG);

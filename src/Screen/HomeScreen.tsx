@@ -167,10 +167,7 @@ export default function HomeScreen() {
         <TouchableOpacity
           onPress={() => eachItemPress(item, 1)}
           style={styles.notesBodyStyle}>
-          <Text
-            style={styles.notesTitleText}>
-            {item.title}
-          </Text>
+          <Text style={styles.notesTitleText}>{item.title}</Text>
           <Text style={styles.notesDescriptionText}>
             {item.description.length < 30
               ? item.description
@@ -178,15 +175,13 @@ export default function HomeScreen() {
           </Text>
         </TouchableOpacity>
 
-        <View style={{justifyContent: 'space-between'}}>
+        <View style={styles.updateDeleteContainer}>
           <Text
             onPress={() => eachItemPress(item, 2)}
-            style={{color: 'blue', fontSize: 16, fontWeight: '600'}}>
+            style={styles.updateText}>
             Update
           </Text>
-          <Text
-            onPress={() => deleteNotes(item._id)}
-            style={{color: 'red', fontSize: 16, fontWeight: '600'}}>
+          <Text onPress={() => deleteNotes(item._id)} style={styles.deleteText}>
             Delete
           </Text>
         </View>
@@ -351,19 +346,32 @@ const styles = StyleSheet.create({
     borderRadius: 20,
     paddingLeft: 20,
   },
-  notesBodyStyle:{
-    justifyContent: 'center'
+  notesBodyStyle: {
+    justifyContent: 'center',
   },
-  notesTitleText:{
+  notesTitleText: {
     color: 'black',
     fontSize: 16,
     fontWeight: '800',
     marginBottom: 8,
   },
-  notesDescriptionText:{
-    color: 'black', 
-    fontSize: 14, 
-    fontWeight: '400'
+  notesDescriptionText: {
+    color: 'black',
+    fontSize: 14,
+    fontWeight: '400',
+  },
+  updateDeleteContainer: {
+    justifyContent: 'space-between',
+  },
+  updateText: {
+    color: 'blue',
+    fontSize: 16,
+    fontWeight: '600',
+  },
+  deleteText: {
+    color: 'red',
+    fontSize: 16,
+    fontWeight: '600',
   },
   btnModel: {
     width: '90%',

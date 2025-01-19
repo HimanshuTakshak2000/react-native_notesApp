@@ -89,10 +89,8 @@ const AddNotes = ({navigation}: AddNotesScreenProps) => {
         value={title}
       />
       {isTitleError && (
-        <View style={{marginVertical: 5, marginLeft: 22}}>
-          <Text style={{color: 'red', fontWeight: '400', fontSize: 14}}>
-            Enter Title for notes
-          </Text>
+        <View style={styles.errorViewStyle}>
+          <Text style={styles.errorTextStyle}>Enter Title for notes</Text>
         </View>
       )}
       <TextInput
@@ -103,10 +101,8 @@ const AddNotes = ({navigation}: AddNotesScreenProps) => {
         value={description}
       />
       {isdescriptionError && (
-        <View style={{marginVertical: 5, marginLeft: 22}}>
-          <Text style={{color: 'red', fontWeight: '400', fontSize: 14}}>
-            Enter Description for notes
-          </Text>
+        <View style={styles.errorViewStyle}>
+          <Text style={styles.errorTextStyle}>Enter Description for notes</Text>
         </View>
       )}
       <TouchableOpacity style={styles.btn} onPress={() => handleAddNotes()}>
@@ -149,5 +145,14 @@ const styles = StyleSheet.create({
     color: 'white',
     fontWeight: '600',
     fontSize: 16,
+  },
+  errorViewStyle: {
+    marginVertical: 5,
+    marginLeft: 22,
+  },
+  errorTextStyle: {
+    color: 'red',
+    fontWeight: '400',
+    fontSize: 14,
   },
 });

@@ -12,7 +12,7 @@ import {StackNavigationProp} from '@react-navigation/stack';
 import {RootParaList} from '../Navigation/RootParaList';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import {baseUrl} from '../utils/baseUrl';
-import {useNavigation} from '@react-navigation/native';
+import {useIsFocused, useNavigation} from '@react-navigation/native';
 import {isValidateEmail} from '../utils/constant';
 
 const LoginScreen = () => {
@@ -22,9 +22,12 @@ const LoginScreen = () => {
   const [isEmailError, setIsEmailError] = useState<Boolean>(false);
   const [isPasswordError, setIsPasswordError] = useState<Boolean>(false);
   const [isLoading, setIsloading] = useState<Boolean>(false);
+  const isFocused = useIsFocused();
   useEffect(() => {
     setIsloading(false);
-  });
+    setIsEmailError(false);
+    setIsPasswordError(false);
+  },[isFocused]);
 
   const handleLoginPress = () => {
     if (email.length === 0 && password.length === 0) {

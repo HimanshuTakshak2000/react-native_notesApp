@@ -11,7 +11,6 @@ import SplashScreen from '../Screen/SplashScreen';
 const Stack = createStackNavigator<RootParaList>();
 
 const MainStack: React.FC = () => {
-  const [isLogin, setIslogin] = useState<boolean>(false);
   const dispatch = useDispatch();
   useEffect(() => {
     getLoginDetails();
@@ -19,22 +18,16 @@ const MainStack: React.FC = () => {
   const getLoginDetails = async () => {
     const user = await AsyncStorage.getItem('User');
     if (user) {
-      setIslogin(true);
       dispatch(setLogin({isLogin: true}));
     } else {
-      setIslogin(false);
       dispatch(setLogin({isLogin: false}));
     }
   };
-  // return isLogin ? <AppStack/> : <AuthStack/>;
   return (
     <Stack.Navigator screenOptions={{headerShown: false}}>
       <Stack.Screen name="Splash" component={SplashScreen} />
-      {/* {isLogin ? ( */}
       <Stack.Screen name="App" component={AppStack} />
-      {/* ) : ( */}
       <Stack.Screen name="Auth" component={AuthStack} />
-      {/* )} */}
     </Stack.Navigator>
   );
 };

@@ -15,7 +15,11 @@ import AsyncStorage from '@react-native-async-storage/async-storage';
 import {useDispatch} from 'react-redux';
 import {setUser} from '../redux/noteReducer';
 import {baseUrl} from '../utils/baseUrl';
-import {useFocusEffect, useIsFocused, useNavigation} from '@react-navigation/native';
+import {
+  useFocusEffect,
+  useIsFocused,
+  useNavigation,
+} from '@react-navigation/native';
 import {TextInput} from 'react-native-gesture-handler';
 import {useSelector} from 'react-redux';
 import {RootState} from '../redux/store';
@@ -151,28 +155,23 @@ export default function HomeScreen() {
     getAllNotes();
   };
 
-  const handleLogoutPress = async()=>{
+  const handleLogoutPress = async () => {
     await AsyncStorage.clear();
     setIsUerDropDown(false);
     navigation.replace('Auth', {screen: 'Login'});
-  }
+  };
 
   const renderItem = (item: noteType) => {
     return (
       <View style={styles.notesItem}>
         <TouchableOpacity
           onPress={() => eachItemPress(item, 1)}
-          style={{justifyContent: 'center'}}>
+          style={styles.notesBodyStyle}>
           <Text
-            style={{
-              color: 'black',
-              fontSize: 16,
-              fontWeight: '800',
-              marginBottom: 8,
-            }}>
+            style={styles.notesTitleText}>
             {item.title}
           </Text>
-          <Text style={{color: 'black', fontSize: 14, fontWeight: '400'}}>
+          <Text style={styles.notesDescriptionText}>
             {item.description.length < 30
               ? item.description
               : `${item.description.substring(0, 30)}...`}
@@ -210,7 +209,7 @@ export default function HomeScreen() {
         )}
         <TouchableOpacity
           style={styles.btn}
-          onPress={() => navigation.navigate("App",{screen:'AddNotes'})}>
+          onPress={() => navigation.navigate('App', {screen: 'AddNotes'})}>
           <Text style={styles.btnText}>Create Note</Text>
         </TouchableOpacity>
       </View>
@@ -218,19 +217,8 @@ export default function HomeScreen() {
       <Modal
         visible={isModelVisible}
         onRequestClose={() => setisModelVisible(false)}>
-        <View
-          style={{
-            flex: 1,
-            justifyContent: 'center',
-            backgroundColor: 'gray',
-          }}>
-          <View
-            style={{
-              backgroundColor: 'white',
-              width: '100%',
-              height: 300,
-              justifyContent: 'center',
-            }}>
+        <View style={styles.modelContainer}>
+          <View style={styles.modelBodyContainer}>
             <TextInput
               style={styles.input}
               placeholder="Enter Notes Title"
@@ -239,10 +227,8 @@ export default function HomeScreen() {
               editable={isUpdatePressed}
             />
             {isTitleError && (
-              <View style={{marginVertical: 5, marginLeft: 22}}>
-                <Text style={{color: 'red', fontWeight: '400', fontSize: 14}}>
-                  Enter Title for notes
-                </Text>
+              <View style={styles.modelErrorContainer}>
+                <Text style={styles.modelErrorText}>Enter Title for notes</Text>
               </View>
             )}
             <TextInput
@@ -254,8 +240,8 @@ export default function HomeScreen() {
               editable={isUpdatePressed}
             />
             {isdescriptionError && (
-              <View style={{marginVertical: 5, marginLeft: 22}}>
-                <Text style={{color: 'red', fontWeight: '400', fontSize: 14}}>
+              <View style={styles.modelErrorContainer}>
+                <Text style={styles.modelErrorText}>
                   Enter Description for notes
                 </Text>
               </View>
@@ -276,24 +262,29 @@ export default function HomeScreen() {
           </View>
         </View>
       </Modal>
-      <View style={{position:'absolute', right:15, top:20}}>
-        {
-          !isUserDropDown? 
-          <TouchableOpacity onPress={()=> setIsUerDropDown(true)}>
+      <View style={styles.userHeaderContainer}>
+        {!isUserDropDown ? (
+          <TouchableOpacity onPress={() => setIsUerDropDown(true)}>
             <Icon name="user-circle" size={30} color="black" />
           </TouchableOpacity>
-          :(
-            <TouchableOpacity style={{backgroundColor:'white', margin:10, alignItems:'center', borderWidth:1, borderColor:'gray', paddingVertical:20, paddingHorizontal:20, justifyContent:'center',borderRadius:10}} activeOpacity={0.7} onPress={()=> setIsUerDropDown(false)}>
-              <Text style={{ fontSize:16, fontWeight:'700', marginBottom:20}}>
-                {`Hi, ${name.split(' ').map((word)=> word.charAt(0).toUpperCase()+word.substring(1)).join(" ")}`}
-              </Text>
-              <TouchableOpacity style={{padding:12, backgroundColor:'powderblue', borderRadius:10}} onPress={handleLogoutPress}>
-                <Text>Logout</Text>
-              </TouchableOpacity>
-              </TouchableOpacity>
-          )
-        }
-            
+        ) : (
+          <TouchableOpacity
+            style={styles.userHeaderViewStyle}
+            activeOpacity={0.7}
+            onPress={() => setIsUerDropDown(false)}>
+            <Text style={styles.userNameText}>
+              {`Hi, ${name
+                .split(' ')
+                .map(word => word.charAt(0).toUpperCase() + word.substring(1))
+                .join(' ')}`}
+            </Text>
+            <TouchableOpacity
+              style={styles.logoutButtonContainer}
+              onPress={handleLogoutPress}>
+              <Text style={styles.logoutText}>Logout</Text>
+            </TouchableOpacity>
+          </TouchableOpacity>
+        )}
       </View>
     </>
   );
@@ -360,6 +351,20 @@ const styles = StyleSheet.create({
     borderRadius: 20,
     paddingLeft: 20,
   },
+  notesBodyStyle:{
+    justifyContent: 'center'
+  },
+  notesTitleText:{
+    color: 'black',
+    fontSize: 16,
+    fontWeight: '800',
+    marginBottom: 8,
+  },
+  notesDescriptionText:{
+    color: 'black', 
+    fontSize: 14, 
+    fontWeight: '400'
+  },
   btnModel: {
     width: '90%',
     height: 45,
@@ -374,5 +379,55 @@ const styles = StyleSheet.create({
     color: 'white',
     fontWeight: '600',
     fontSize: 16,
+  },
+  modelContainer: {
+    flex: 1,
+    justifyContent: 'center',
+    backgroundColor: 'gray',
+  },
+  modelBodyContainer: {
+    backgroundColor: 'white',
+    width: '100%',
+    height: 300,
+    justifyContent: 'center',
+  },
+  modelErrorContainer: {
+    marginVertical: 5,
+    marginLeft: 22,
+  },
+  modelErrorText: {
+    color: 'red',
+    fontWeight: '400',
+    fontSize: 14,
+  },
+  userHeaderContainer: {
+    position: 'absolute',
+    right: 15,
+    top: 20,
+  },
+  userHeaderViewStyle: {
+    backgroundColor: 'white',
+    margin: 10,
+    alignItems: 'center',
+    borderWidth: 1,
+    borderColor: 'gray',
+    padding: 20,
+    justifyContent: 'center',
+    borderRadius: 10,
+  },
+  userNameText: {
+    fontSize: 16,
+    fontWeight: '700',
+    marginBottom: 20,
+  },
+  logoutButtonContainer: {
+    padding: 12,
+    backgroundColor: 'powderblue',
+    borderRadius: 10,
+  },
+  logoutText: {
+    fontSize: 14,
+    fontWeight: '800',
+    color: 'white',
   },
 });

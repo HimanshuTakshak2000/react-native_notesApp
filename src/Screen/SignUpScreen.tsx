@@ -11,6 +11,7 @@ import React, {useState, useEffect} from 'react';
 import {StackNavigationProp} from '@react-navigation/stack';
 import {Auth} from '../Navigation/RootParaList';
 import {baseUrl} from '../utils/baseUrl';
+import {isValidateEmail, isValidatePassword} from '../utils/constant';
 
 type SignUpScreenProps = {
   navigation: StackNavigationProp<Auth, 'Sign'>;
@@ -30,20 +31,7 @@ export default function SignUpScreen({navigation}: SignUpScreenProps) {
     setIsloading(false);
   });
 
-  const emailRegex = /^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/;
-  const isValidateEmail = (email: string) => {
-    return emailRegex.test(email);
-  };
-
-  const passwordRegex =
-    /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[@$!%*?&])[A-Za-z\d@$!%*?&]{8,}$/;
-  const isValidatePassword = (password: string) => {
-    return passwordRegex.test(password);
-  };
-
   const handleCreatePress = () => {
-    // console.log('login is pressed');
-
     if (email.length === 0 && password.length === 0 && name.length === 0) {
       setIsEmailError(true);
       setIsNameError(true);
@@ -71,7 +59,6 @@ export default function SignUpScreen({navigation}: SignUpScreenProps) {
       body: JSON.stringify(body),
     });
     const data = await res.json();
-    console.log('data :- ', data);
     if (data.status == false) {
       setIsEmailIdExistError(true);
       ToastAndroid.show(`${data.message}`, ToastAndroid.LONG);
@@ -110,66 +97,39 @@ export default function SignUpScreen({navigation}: SignUpScreenProps) {
   };
 
   const handleSignUpPress = () => {
-    console.log('Craete Account is pressed');
     navigation.navigate('Login');
   };
 
   return (
-    <View
-      style={{
-        flex: 1,
-        backgroundColor: 'white',
-        justifyContent: 'center',
-        position: 'relative',
-      }}>
-      {/* <Text>LoginScreen</Text> */}
-
-      <View style={{paddingHorizontal: 20}}>
-        <Text style={{fontSize: 30, color: 'black', fontWeight: 'bold'}}>
-          Create New Account
-        </Text>
-        <View style={{marginTop: 20, marginBottom: 30}}>
-          <View style={{marginBottom: 20}}>
+    <View style={styles.container}>
+      <View style={styles.bodyContainer}>
+        <Text style={styles.bodyTextHeader}>Create New Account</Text>
+        <View style={styles.textInputContainer}>
+          <View style={styles.nameEmailTextInputContainer}>
             <TextInput
               placeholder="Enter Name"
               value={name}
               onChangeText={text => handleNameChange(text)}
-              style={{
-                borderColor: 'black',
-                borderWidth: 1,
-                borderRadius: 8,
-                fontSize: 16,
-              }}
+              style={styles.textInputStyle}
             />
-            {isNameError && (
-              <Text style={{marginTop: 3, color: 'red'}}>Enter Name</Text>
-            )}
+            {isNameError && <Text style={styles.errorText}>Enter Name</Text>}
           </View>
 
-          <View style={{marginBottom: 20}}>
+          <View style={styles.nameEmailTextInputContainer}>
             <TextInput
               placeholder="Enter Email"
               value={email}
               onChangeText={text => handleEmailChange(text)}
-              style={{
-                borderColor: 'black',
-                borderWidth: 1,
-                borderRadius: 8,
-                fontSize: 16,
-              }}
+              style={styles.textInputStyle}
             />
             {isEmailError &&
               (email.length == 0 ? (
-                <Text style={{marginTop: 3, color: 'red'}}>Enter Email</Text>
+                <Text style={styles.errorText}>Enter Email</Text>
               ) : (
-                <Text style={{marginTop: 3, color: 'red'}}>
-                  Enter valid Email
-                </Text>
+                <Text style={styles.errorText}>Enter valid Email</Text>
               ))}
             {isEmailIdExistError && (
-              <Text style={{marginTop: 3, color: 'red'}}>
-                Email Already Exist
-              </Text>
+              <Text style={styles.errorText}>Email Already Exist</Text>
             )}
           </View>
 
@@ -178,38 +138,25 @@ export default function SignUpScreen({navigation}: SignUpScreenProps) {
               placeholder="Enter Password"
               value={password}
               onChangeText={text => handlePasswordChange(text)}
-              style={{
-                borderColor: 'black',
-                borderWidth: 1,
-                borderRadius: 8,
-                fontSize: 16,
-              }}
+              style={styles.textInputStyle}
             />
             {isPasswordError &&
               (password.length == 0 ? (
-                <Text style={{marginTop: 3, color: 'red'}}>Enter Password</Text>
+                <Text style={styles.errorText}>Enter Password</Text>
               ) : (
                 <Text
-                  style={{
-                    marginTop: 3,
-                    color: 'red',
-                  }}>{`Minimum 8 character\n1 UpperCase\n1 LowerCase\n1 Number\n1 Special Character`}</Text>
+                  style={
+                    styles.errorText
+                  }>{`Minimum 8 character\n1 UpperCase\n1 LowerCase\n1 Number\n1 Special Character`}</Text>
               ))}
           </View>
         </View>
 
         <TouchableOpacity
-          style={{backgroundColor: 'black', borderRadius: 8, marginBottom: 60}}
+          style={styles.createAccountButtonContainer}
           onPress={() => handleCreatePress()}
           activeOpacity={0.6}>
-          <Text
-            style={{
-              padding: 15,
-              color: 'white',
-              textAlign: 'center',
-              fontWeight: 'bold',
-              fontSize: 20,
-            }}>
+          <Text style={styles.createAccountButtonText}>
             {isLoading ? (
               <ActivityIndicator size={28} color={'white'} />
             ) : (
@@ -219,31 +166,77 @@ export default function SignUpScreen({navigation}: SignUpScreenProps) {
         </TouchableOpacity>
 
         <TouchableOpacity
-          style={{borderColor: 'black', borderRadius: 8, borderWidth: 1}}
+          style={styles.loginButtonContainer}
           onPress={() => handleSignUpPress()}
           activeOpacity={0.6}>
-          <Text
-            style={{
-              padding: 15,
-              color: 'black',
-              textAlign: 'center',
-              fontWeight: 'bold',
-              fontSize: 20,
-            }}>
-            Login
-          </Text>
+          <Text style={styles.loginButtonText}>Login</Text>
         </TouchableOpacity>
       </View>
-      {isLoading && (
-        <View
-          style={{
-            backgroundColor: 'transparent',
-            position: 'absolute',
-            width: '100%',
-            height: '100%',
-          }}
-        />
-      )}
+      {isLoading && <View style={styles.loaderContainer} />}
     </View>
   );
 }
+
+const styles = StyleSheet.create({
+  container: {
+    flex: 1,
+    backgroundColor: 'white',
+    justifyContent: 'center',
+    position: 'relative',
+  },
+  loaderContainer: {
+    backgroundColor: 'transparent',
+    position: 'absolute',
+    width: '100%',
+    height: '100%',
+  },
+  bodyContainer: {
+    paddingHorizontal: 20,
+  },
+  bodyTextHeader: {
+    fontSize: 30,
+    color: 'black',
+    fontWeight: 'bold',
+  },
+  textInputContainer: {
+    marginTop: 20,
+    marginBottom: 30,
+  },
+  nameEmailTextInputContainer: {
+    marginBottom: 20,
+  },
+  textInputStyle: {
+    borderColor: 'black',
+    borderWidth: 1,
+    borderRadius: 8,
+    fontSize: 16,
+  },
+  errorText: {
+    marginTop: 3,
+    color: 'red',
+  },
+  createAccountButtonContainer: {
+    backgroundColor: 'black',
+    borderRadius: 8,
+    marginBottom: 60,
+  },
+  createAccountButtonText: {
+    padding: 15,
+    color: 'white',
+    textAlign: 'center',
+    fontWeight: 'bold',
+    fontSize: 20,
+  },
+  loginButtonContainer: {
+    borderColor: 'black',
+    borderRadius: 8,
+    borderWidth: 1,
+  },
+  loginButtonText: {
+    padding: 15,
+    color: 'black',
+    textAlign: 'center',
+    fontWeight: 'bold',
+    fontSize: 20,
+  },
+});

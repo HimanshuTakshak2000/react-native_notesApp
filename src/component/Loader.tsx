@@ -8,22 +8,8 @@ type LoaderProps = {
 export default function Loader({visible}: LoaderProps) {
   return (
     <Modal transparent visible={visible}>
-      <View
-        style={{
-          flex: 1,
-          backgroundColor: 'rgba(0,0,0, 0.5)',
-          justifyContent: 'center',
-          alignItems: 'center',
-        }}>
-        <View
-          style={{
-            height: 80,
-            width: 80,
-            borderRadius: 10,
-            justifyContent: 'center',
-            alignItems: 'center',
-            backgroundColor: 'white',
-          }}>
+      <View style={styles.container}>
+        <View style={styles.loaderContainer}>
           <ActivityIndicator size={'large'} color={'black'} />
         </View>
       </View>
@@ -31,4 +17,19 @@ export default function Loader({visible}: LoaderProps) {
   );
 }
 
-const styles = StyleSheet.create({});
+const styles = StyleSheet.create({
+  container: {
+    flex: 1,
+    backgroundColor: 'rgba(0,0,0, 0.5)',
+    justifyContent: 'center',
+    alignItems: 'center',
+  },
+  loaderContainer: {
+    height: 80,
+    width: 80,
+    borderRadius: 10,
+    justifyContent: 'center',
+    alignItems: 'center',
+    backgroundColor: 'white',
+  },
+});

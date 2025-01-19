@@ -13,6 +13,7 @@ import {RootParaList} from '../Navigation/RootParaList';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import {baseUrl} from '../utils/baseUrl';
 import {useNavigation} from '@react-navigation/native';
+import {isValidateEmail} from '../utils/constant';
 
 const LoginScreen = () => {
   const navigation = useNavigation<StackNavigationProp<RootParaList>>();
@@ -25,26 +26,13 @@ const LoginScreen = () => {
     setIsloading(false);
   });
 
-  const emailRegex = /^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/;
-  const isValidateEmail = (email: string) => {
-    return emailRegex.test(email);
-  };
-
-  const passwordRegex =
-    /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[@$!%*?&])[A-Za-z\d@$!%*?&]{8,}$/;
-  const isValidatePassword = (password: string) => {
-    return passwordRegex.test(password);
-  };
-
   const handleLoginPress = () => {
-    // console.log('login is pressed');
-
     if (email.length === 0 && password.length === 0) {
       setIsEmailError(true);
       setIsPasswordError(true);
     } else if (!isValidateEmail(email)) {
       setIsEmailError(true);
-    } else if (!isValidatePassword(password)) {
+    } else if (password.length === 0) {
       setIsPasswordError(true);
     } else {
       setIsEmailError(false);
@@ -64,7 +52,6 @@ const LoginScreen = () => {
       body: JSON.stringify(body),
     });
     const data = await res.json();
-    console.log('data :- ', data);
     if (data.status == false) {
       ToastAndroid.show(data.message, ToastAndroid.SHORT);
       setIsloading(false);
@@ -85,7 +72,7 @@ const LoginScreen = () => {
 
   const handlePasswordChange = (text: string) => {
     setPassword(text);
-    if (!isValidatePassword(text)) {
+    if (text.length == 0) {
       setIsPasswordError(true);
     } else {
       setIsPasswordError(false);
@@ -93,44 +80,26 @@ const LoginScreen = () => {
   };
 
   const handleCreatePress = () => {
-    console.log('Craete Account is pressed');
     navigation.navigate('Auth', {screen: 'Sign'});
   };
 
   return (
-    <View
-      style={{
-        flex: 1,
-        backgroundColor: 'white',
-        justifyContent: 'center',
-        position: 'relative',
-      }}>
-      {/* <Text>LoginScreen</Text> */}
-
-      <View style={{paddingHorizontal: 20}}>
-        <Text style={{fontSize: 30, color: 'black', fontWeight: 'bold'}}>
-          Welcome Back
-        </Text>
-        <View style={{marginTop: 20, marginBottom: 30}}>
-          <View style={{marginBottom: 20}}>
+    <View style={styles.container}>
+      <View style={styles.bodyContainer}>
+        <Text style={styles.bodyTextHeader}>Welcome Back</Text>
+        <View style={styles.textInputContainer}>
+          <View style={styles.emailTextInputContainer}>
             <TextInput
               placeholder="Enter Email"
               value={email}
               onChangeText={text => handleEmailChange(text)}
-              style={{
-                borderColor: 'black',
-                borderWidth: 1,
-                borderRadius: 8,
-                fontSize: 16,
-              }}
+              style={styles.textInputStyle}
             />
             {isEmailError &&
               (email.length == 0 ? (
-                <Text style={{marginTop: 3, color: 'red'}}>Enter Email</Text>
+                <Text style={styles.errorText}>Enter Email</Text>
               ) : (
-                <Text style={{marginTop: 3, color: 'red'}}>
-                  Enter valid Email
-                </Text>
+                <Text style={styles.errorText}>Enter valid Email</Text>
               ))}
           </View>
 
@@ -139,38 +108,19 @@ const LoginScreen = () => {
               placeholder="Enter Password"
               value={password}
               onChangeText={text => handlePasswordChange(text)}
-              style={{
-                borderColor: 'black',
-                borderWidth: 1,
-                borderRadius: 8,
-                fontSize: 16,
-              }}
+              style={styles.textInputStyle}
             />
-            {isPasswordError &&
-              (password.length == 0 ? (
-                <Text style={{marginTop: 3, color: 'red'}}>Enter Password</Text>
-              ) : (
-                <Text
-                  style={{
-                    marginTop: 3,
-                    color: 'red',
-                  }}>{`Minimum 8 character\n1 UpperCase\n1 LowerCase\n1 Number\n1 Special Character`}</Text>
-              ))}
+            {isPasswordError && (
+              <Text style={styles.errorText}>Enter Password</Text>
+            )}
           </View>
         </View>
 
         <TouchableOpacity
-          style={{backgroundColor: 'black', borderRadius: 8, marginBottom: 60}}
+          style={styles.loginButtonContainer}
           onPress={() => handleLoginPress()}
           activeOpacity={0.6}>
-          <Text
-            style={{
-              padding: 15,
-              color: 'white',
-              textAlign: 'center',
-              fontWeight: 'bold',
-              fontSize: 20,
-            }}>
+          <Text style={styles.loginButtonText}>
             {isLoading ? (
               <ActivityIndicator size={28} color={'white'} />
             ) : (
@@ -180,35 +130,79 @@ const LoginScreen = () => {
         </TouchableOpacity>
 
         <TouchableOpacity
-          style={{borderColor: 'black', borderRadius: 8, borderWidth: 1}}
+          style={styles.createAccountButtonContainer}
           onPress={() => handleCreatePress()}
           activeOpacity={0.6}>
-          <Text
-            style={{
-              padding: 15,
-              color: 'black',
-              textAlign: 'center',
-              fontWeight: 'bold',
-              fontSize: 20,
-            }}>
-            Create Account
-          </Text>
+          <Text style={styles.createAccountButtonText}>Create Account</Text>
         </TouchableOpacity>
       </View>
-      {isLoading && (
-        <View
-          style={{
-            backgroundColor: 'transparent',
-            position: 'absolute',
-            width: '100%',
-            height: '100%',
-          }}
-        />
-      )}
+      {isLoading && <View style={styles.loaderContainer} />}
     </View>
   );
 };
 
 export default LoginScreen;
 
-const styles = StyleSheet.create({});
+const styles = StyleSheet.create({
+  container: {
+    flex: 1,
+    backgroundColor: 'white',
+    justifyContent: 'center',
+    position: 'relative',
+  },
+  loaderContainer: {
+    backgroundColor: 'transparent',
+    position: 'absolute',
+    width: '100%',
+    height: '100%',
+  },
+  bodyContainer: {
+    paddingHorizontal: 20,
+  },
+  bodyTextHeader: {
+    fontSize: 30,
+    color: 'black',
+    fontWeight: 'bold',
+  },
+  textInputContainer: {
+    marginTop: 20,
+    marginBottom: 30,
+  },
+  emailTextInputContainer: {
+    marginBottom: 20,
+  },
+  textInputStyle: {
+    borderColor: 'black',
+    borderWidth: 1,
+    borderRadius: 8,
+    fontSize: 16,
+  },
+  errorText: {
+    marginTop: 3,
+    color: 'red',
+  },
+  loginButtonContainer: {
+    backgroundColor: 'black',
+    borderRadius: 8,
+    marginBottom: 60,
+  },
+  loginButtonText: {
+    padding: 15,
+    color: 'white',
+    textAlign: 'center',
+    fontWeight: 'bold',
+    fontSize: 20,
+  },
+  createAccountButtonContainer: {
+    borderColor: 'black',
+    borderRadius: 8,
+    borderWidth: 1,
+  },
+  createAccountButtonText: {
+    padding: 15,
+    color: 'black',
+    textAlign: 'center',
+    fontWeight: 'bold',
+    fontSize: 20,
+  },
+});

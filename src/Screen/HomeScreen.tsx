@@ -24,6 +24,7 @@ import {TextInput} from 'react-native-gesture-handler';
 import {useSelector} from 'react-redux';
 import {RootState} from '../redux/store';
 import Icon from 'react-native-vector-icons/FontAwesome';
+import Loader from '../component/Loader';
 
 type noteType = {
   _id: string;
@@ -49,6 +50,7 @@ export default function HomeScreen() {
   const {userId, name} = useSelector((state: RootState) => state.noteReducer);
   const dispatch = useDispatch();
   const navigation = useNavigation<StackNavigationProp<RootParaList>>();
+  const [isLoading, setIsLoading] = useState<boolean>(false);
   useFocusEffect(
     useCallback(() => {
       getAllNotes();
@@ -64,6 +66,7 @@ export default function HomeScreen() {
   const getAllNotes = async () => {
     const user = await AsyncStorage.getItem('User');
     if (user) {
+      setIsLoading(true);
       const parsedUser = JSON.parse(user);
       const userId = parsedUser._id;
       const name = parsedUser.name;
@@ -78,6 +81,7 @@ export default function HomeScreen() {
       const data = await res.json();
       setNotes(data);
     }
+    setIsLoading(false);
   };
   const eachItemPress = (item: noteType, type: number) => {
     if (type == 2) {
@@ -195,18 +199,20 @@ export default function HomeScreen() {
         <View style={styles.header}>
           <Text style={styles.title}>Notes App</Text>
         </View>
-        {notes.length > 0 ? (
-          <FlatList data={notes} renderItem={({item}) => renderItem(item)} />
-        ) : (
-          <View style={styles.noDataView}>
-            <Text style={styles.title}>Notes Not Found</Text>
-          </View>
-        )}
+        {!isLoading &&
+          (notes.length > 0 ? (
+            <FlatList data={notes} renderItem={({item}) => renderItem(item)} />
+          ) : (
+            <View style={styles.noDataView}>
+              <Text style={styles.title}>Notes Not Found</Text>
+            </View>
+          ))}
         <TouchableOpacity
           style={styles.btn}
           onPress={() => navigation.navigate('App', {screen: 'AddNotes'})}>
           <Text style={styles.btnText}>Create Note</Text>
         </TouchableOpacity>
+        <Loader visible={isLoading} />
       </View>
 
       <Modal

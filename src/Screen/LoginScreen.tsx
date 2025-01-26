@@ -27,7 +27,7 @@ const LoginScreen = () => {
     setIsloading(false);
     setIsEmailError(false);
     setIsPasswordError(false);
-  },[isFocused]);
+  }, [isFocused]);
 
   const handleLoginPress = () => {
     if (email.length === 0 && password.length === 0) {
@@ -97,6 +97,7 @@ const LoginScreen = () => {
               value={email}
               onChangeText={text => handleEmailChange(text)}
               style={styles.textInputStyle}
+              placeholderTextColor={'black'}
             />
             {isEmailError &&
               (email.length == 0 ? (
@@ -112,6 +113,7 @@ const LoginScreen = () => {
               value={password}
               onChangeText={text => handlePasswordChange(text)}
               style={styles.textInputStyle}
+              placeholderTextColor={'black'}
             />
             {isPasswordError && (
               <Text style={styles.errorText}>Enter Password</Text>
@@ -179,6 +181,7 @@ const styles = StyleSheet.create({
     borderWidth: 1,
     borderRadius: 8,
     fontSize: 16,
+    color: 'black',
   },
   errorText: {
     marginTop: 3,

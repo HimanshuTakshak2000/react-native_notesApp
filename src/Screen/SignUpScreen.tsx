@@ -112,6 +112,7 @@ export default function SignUpScreen({navigation}: SignUpScreenProps) {
               value={name}
               onChangeText={text => handleNameChange(text)}
               style={styles.textInputStyle}
+              placeholderTextColor={'black'}
             />
             {isNameError && <Text style={styles.errorText}>Enter Name</Text>}
           </View>
@@ -122,6 +123,7 @@ export default function SignUpScreen({navigation}: SignUpScreenProps) {
               value={email}
               onChangeText={text => handleEmailChange(text)}
               style={styles.textInputStyle}
+              placeholderTextColor={'black'}
             />
             {isEmailError &&
               (email.length == 0 ? (
@@ -140,6 +142,7 @@ export default function SignUpScreen({navigation}: SignUpScreenProps) {
               value={password}
               onChangeText={text => handlePasswordChange(text)}
               style={styles.textInputStyle}
+              placeholderTextColor={'black'}
             />
             {isPasswordError &&
               (password.length == 0 ? (
@@ -211,6 +214,7 @@ const styles = StyleSheet.create({
     borderWidth: 1,
     borderRadius: 8,
     fontSize: 16,
+    color: 'black',
   },
   errorText: {
     marginTop: 3,

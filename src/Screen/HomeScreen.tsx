@@ -345,6 +345,7 @@ const styles = StyleSheet.create({
     marginTop: 20,
     borderRadius: 20,
     paddingLeft: 20,
+    color: 'black',
   },
   notesBodyStyle: {
     justifyContent: 'center',
@@ -427,6 +428,7 @@ const styles = StyleSheet.create({
     fontSize: 16,
     fontWeight: '700',
     marginBottom: 20,
+    color: 'black',
   },
   logoutButtonContainer: {
     padding: 12,

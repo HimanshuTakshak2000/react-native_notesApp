@@ -87,6 +87,7 @@ const AddNotes = ({navigation}: AddNotesScreenProps) => {
         placeholder="Enter Notes Title"
         onChangeText={t => handleTitleChange(t)}
         value={title}
+        placeholderTextColor={'black'}
       />
       {isTitleError && (
         <View style={styles.errorViewStyle}>
@@ -99,6 +100,7 @@ const AddNotes = ({navigation}: AddNotesScreenProps) => {
         multiline
         onChangeText={t => handledescriptionChange(t)}
         value={description}
+        placeholderTextColor={'black'}
       />
       {isdescriptionError && (
         <View style={styles.errorViewStyle}>
@@ -130,6 +132,7 @@ const styles = StyleSheet.create({
     marginTop: 20,
     borderRadius: 20,
     paddingLeft: 20,
+    color: 'black',
   },
   btn: {
     width: '90%',

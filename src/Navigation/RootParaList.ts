@@ -13,3 +13,4 @@ export type App = {
   Home: undefined;
   AddNotes: undefined;
 };
+

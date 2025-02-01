@@ -12,6 +12,7 @@ import {StackNavigationProp} from '@react-navigation/stack';
 import {Auth} from '../Navigation/RootParaList';
 import {baseUrl} from '../utils/baseUrl';
 import {isValidateEmail, isValidatePassword} from '../utils/constant';
+import Ionicons from 'react-native-vector-icons/Ionicons';
 
 type SignUpScreenProps = {
   navigation: StackNavigationProp<Auth, 'Sign'>;
@@ -27,9 +28,7 @@ export default function SignUpScreen({navigation}: SignUpScreenProps) {
   const [isLoading, setIsloading] = useState<boolean>(false);
   const [isEmailIdExistError, setIsEmailIdExistError] =
     useState<boolean>(false);
-  useEffect(() => {
-    setIsloading(false);
-  });
+  const [isSecure, setIsSecure] = useState<boolean>(true);
 
   const handleCreatePress = () => {
     if (email.length === 0 && password.length === 0 && name.length === 0) {
@@ -43,12 +42,12 @@ export default function SignUpScreen({navigation}: SignUpScreenProps) {
     } else {
       setIsEmailError(false);
       setIsPasswordError(false);
-      setIsloading(true);
       signApi();
     }
   };
 
   const signApi = async () => {
+    setIsloading(true);
     const headers = new Headers();
     headers.append('Content-Type', 'application/json');
     const body = {email: email.toLocaleLowerCase(), password, name};
@@ -63,8 +62,10 @@ export default function SignUpScreen({navigation}: SignUpScreenProps) {
       setIsEmailIdExistError(true);
       setEmail(email.toLocaleLowerCase());
       ToastAndroid.show(`${data.message}`, ToastAndroid.LONG);
+      setIsloading(false);
     } else {
       ToastAndroid.show('Account Created Successfully!!', ToastAndroid.LONG);
+      setIsloading(false);
       navigation.navigate('Login');
     }
   };
@@ -137,13 +138,26 @@ export default function SignUpScreen({navigation}: SignUpScreenProps) {
           </View>
 
           <View>
-            <TextInput
-              placeholder="Enter Password"
-              value={password}
-              onChangeText={text => handlePasswordChange(text)}
-              style={styles.textInputStyle}
-              placeholderTextColor={'black'}
-            />
+            <View style={styles.passwordContainer}>
+              <TextInput
+                placeholder="Enter Password"
+                value={password}
+                onChangeText={text => handlePasswordChange(text)}
+                secureTextEntry={isSecure}
+                placeholderTextColor={'black'}
+                style={styles.passwordTextContainer}
+              />
+              <TouchableOpacity
+                onPress={() => setIsSecure(!isSecure)}
+                style={styles.eyeIcon}>
+                <Ionicons
+                  name={isSecure ? 'eye-off' : 'eye'}
+                  size={26}
+                  color="black"
+                />
+              </TouchableOpacity>
+            </View>
+
             {isPasswordError &&
               (password.length == 0 ? (
                 <Text style={styles.errorText}>Enter Password</Text>
@@ -215,6 +229,20 @@ const styles = StyleSheet.create({
     borderRadius: 8,
     fontSize: 16,
     color: 'black',
+  },
+  passwordContainer: {
+    borderColor: 'black',
+    borderWidth: 1,
+    borderRadius: 8,
+    flexDirection: 'row',
+  },
+  passwordTextContainer: {
+    fontSize: 16,
+    color: 'black',
+    width: '90%',
+  },
+  eyeIcon: {
+    alignSelf: 'center',
   },
   errorText: {
     marginTop: 3,

@@ -14,6 +14,7 @@ import AsyncStorage from '@react-native-async-storage/async-storage';
 import {baseUrl} from '../utils/baseUrl';
 import {useIsFocused, useNavigation} from '@react-navigation/native';
 import {isValidateEmail} from '../utils/constant';
+import Ionicons from 'react-native-vector-icons/Ionicons';
 
 const LoginScreen = () => {
   const navigation = useNavigation<StackNavigationProp<RootParaList>>();
@@ -22,6 +23,7 @@ const LoginScreen = () => {
   const [isEmailError, setIsEmailError] = useState<Boolean>(false);
   const [isPasswordError, setIsPasswordError] = useState<Boolean>(false);
   const [isLoading, setIsloading] = useState<Boolean>(false);
+  const [isSecure, setIsSecure] = useState<boolean>(true);
   const isFocused = useIsFocused();
   useEffect(() => {
     setIsloading(false);
@@ -108,13 +110,25 @@ const LoginScreen = () => {
           </View>
 
           <View>
-            <TextInput
-              placeholder="Enter Password"
-              value={password}
-              onChangeText={text => handlePasswordChange(text)}
-              style={styles.textInputStyle}
-              placeholderTextColor={'black'}
-            />
+            <View style={styles.passwordContainer}>
+              <TextInput
+                placeholder="Enter Password"
+                value={password}
+                onChangeText={text => handlePasswordChange(text)}
+                secureTextEntry={isSecure}
+                placeholderTextColor={'black'}
+                style={styles.passwordTextContainer}
+              />
+              <TouchableOpacity
+                onPress={() => setIsSecure(!isSecure)}
+                style={styles.eyeIcon}>
+                <Ionicons
+                  name={isSecure ? 'eye-off' : 'eye'}
+                  size={26}
+                  color="black"
+                />
+              </TouchableOpacity>
+            </View>
             {isPasswordError && (
               <Text style={styles.errorText}>Enter Password</Text>
             )}
@@ -182,6 +196,20 @@ const styles = StyleSheet.create({
     borderRadius: 8,
     fontSize: 16,
     color: 'black',
+  },
+  passwordContainer: {
+    borderColor: 'black',
+    borderWidth: 1,
+    borderRadius: 8,
+    flexDirection: 'row',
+  },
+  passwordTextContainer: {
+    fontSize: 16,
+    color: 'black',
+    width: '90%',
+  },
+  eyeIcon: {
+    alignSelf: 'center',
   },
   errorText: {
     marginTop: 3,
